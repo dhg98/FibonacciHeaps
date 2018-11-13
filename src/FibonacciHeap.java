@@ -74,4 +74,60 @@ public class FibonacciHeap<T extends Comparable <T>> {
         }
     }
     
+    public void decreaseKey(Node<T> node, T newKey) {
+        if (node.getKey().compareTo(newKey) < 0) {
+            throw new IllegalArgumentException("The new key " + '(' + newKey + ')' +
+                    " is greater than the old one " + '(' + node.getKey() + ')');
+        } else {
+            node.setKey(newKey);
+            Node<T> y = node.getFather();
+            if (y != null && node.getKey().compareTo(y.getKey()) < 0) {
+                cut(node, y);
+                cascadingCut(y);
+            }
+            if (node.getKey().compareTo(min.getKey()) < 0) {
+                min = node;
+            }
+        }
+    }
+    
+    private void cascadingCut(Node<T> y) {
+        Node<T> z = y.getFather();
+        if (z != null) {
+            if (!y.isMarked()) {
+                y.setMarked(true);
+            } else {
+                cut(y, z);
+                cascadingCut(z);
+            }
+        }
+    }
+    
+    private void cut(Node<T> child, Node<T> father) {
+        //If the Node is his only sibling, if we delete it, his father will have no children.
+        if (child.getLeftSibling() != child) {
+            Node<T> left = child.getLeftSibling();
+            Node<T> right = child.getRightSibling();
+            left.setRightSibling(right);
+            right.setLeftSibling(left);
+        } else {
+            father.setChild(null);
+        }
+        //If this child was the one the father had assigned, we have to change it (with the right one).
+        if (father.getChild() == child) {
+            father.setChild(child.getRightSibling());
+        }
+        
+        father.setDegree(father.getDegree() - 1);
+        
+        //Add child to the left of the minimum
+        min.getLeftSibling().setRightSibling(child);
+        child.setLeftSibling(min.getLeftSibling());
+        child.setRightSibling(min);
+        min.setLeftSibling(child);
+        
+        child.setFather(null);
+        child.setMarked(false);
+    }
+    
 }

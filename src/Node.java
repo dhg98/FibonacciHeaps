@@ -62,7 +62,24 @@ public class Node<T extends Comparable<T>> {
     public Node<T> getRightSibling() {
         return rightSibling;
     }
+
+    public Node<T> getFather() {
+        return father;
+    }
+
+    public boolean isMarked() {
+        return marked;
+    }
+
+    public Node<T> getChild() {
+        return child;
+    }
+
+    public void setKey(T key) {
+        this.key = key;
+    }
        
+    
     
     
 }
