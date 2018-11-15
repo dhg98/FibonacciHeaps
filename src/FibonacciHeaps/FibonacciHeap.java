@@ -68,14 +68,47 @@ public class FibonacciHeap<T extends Comparable <T>> {
         }
     }
     
-    public T pop() {
+    public Node<T> pop() {
         if (min == null) throw new NullPointerException("The heap is empty");
         else {
             Node<T> minimum = min;
+            Node<T> child = minimum.child;
+            if (child != null) {
+                //Delete the parent from the children.
+                Node<T> lastNode = child.leftSibling;
+                while (lastNode != child) {
+                    child.father = null;
+                    child = child.rightSibling;
+                }
+                //Insertion of the children in the main 'deque'.
+                min.leftSibling.rightSibling = child;
+                child.leftSibling.rightSibling = min;
+                Node<T> leftSiblingChild = child.leftSibling;
+                child.leftSibling = min.leftSibling;
+                min.leftSibling = leftSiblingChild;
+            }    
+            minimum.child = null;
             
+            //Delete the minimum from the list.
+            minimum.leftSibling.rightSibling = minimum.rightSibling;
+            minimum.rightSibling.leftSibling = minimum.leftSibling;
             
-            return minimum.key;
+            //If there was only one Node left, we have not got to do anything.
+            if (size == 1) {
+                min = null;
+            } else {
+                //Otherwise, we have to consolidate
+                min = minimum.rightSibling;
+                consolidate();                
+            }
+            size--;
+            return minimum;
         }
+    }
+    
+    private void consolidate() {
+        
+        
     }
     
     public void decreaseKey(Node<T> node, T newKey) {
@@ -110,13 +143,13 @@ public class FibonacciHeap<T extends Comparable <T>> {
     }
     
     private void cut(Node<T> child, Node<T> father) {
-        //If the Node is his only sibling, if we delete it, his father will have no children.
         if (child.getLeftSibling() != child) {
             Node<T> left = child.leftSibling;
             Node<T> right = child.rightSibling;
             left.rightSibling = right;
             right.leftSibling = left;
         } else {
+            //If the Node is his only sibling, if we delete it, his father will have no children.
             father.child = null;
         }
         //If this child was the one the father had assigned, we have to change it (with the right one).
@@ -131,6 +164,18 @@ public class FibonacciHeap<T extends Comparable <T>> {
         
         child.father = null;
         child.marked = false;
+    }
+    
+    public void delete(Node<T> toDelete) {
+        Node<T> minimum = min;
+        //Delete the minimum from the Heap
+        pop();
+        //Decrease the key of the Node we want to delete to the minimum of the Heap.
+        decreaseKey(toDelete, minimum.key);
+        //Delete the minimum
+        pop();
+        //Restore the minimum.
+        push(minimum.key);        
     }
     
 }
