@@ -1,5 +1,8 @@
 package FibonacciHeaps;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class FibonacciHeap<T extends Comparable <T>> {
     private Node<T> min = null;
     private int size = 0;
@@ -74,19 +77,20 @@ public class FibonacciHeap<T extends Comparable <T>> {
             Node<T> minimum = min;
             Node<T> child = minimum.child;
             if (child != null) {
-                //Delete the parent from the children.
-                Node<T> lastNode = child.leftSibling;
-                while (lastNode != child) {
-                    child.father = null;
-                    child = child.rightSibling;
-                }
                 //Insertion of the children in the main 'deque'.
                 min.leftSibling.rightSibling = child;
-                child.leftSibling.rightSibling = min;
                 Node<T> leftSiblingChild = child.leftSibling;
+                leftSiblingChild.rightSibling = min;
                 child.leftSibling = min.leftSibling;
                 min.leftSibling = leftSiblingChild;
-            }    
+                
+                //Delete the parent from the children.
+                while (child != min) {
+                    child.father = null;
+                    child = child.rightSibling;
+                }                
+            }
+            //The minimum has got no children.
             minimum.child = null;
             
             //Delete the minimum from the list.
@@ -97,7 +101,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
             if (size == 1) {
                 min = null;
             } else {
-                //Otherwise, we have to consolidate
+                //Otherwise, we have to change the minimum and consolidate.
                 min = minimum.rightSibling;
                 consolidate();                
             }
@@ -106,7 +110,14 @@ public class FibonacciHeap<T extends Comparable <T>> {
         }
     }
     
+    private static double log(double num, int base) {
+        return (Math.log10(num) / Math.log10(base));
+    }
+    
     private void consolidate() {
+        //The size of the Array is s
+        int sizeA = (int) (Math.ceil(log(size, 2)));
+        List<Node<T>> A = new ArrayList<>(sizeA);
         
         
     }
