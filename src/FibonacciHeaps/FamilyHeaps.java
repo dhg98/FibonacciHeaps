@@ -10,7 +10,7 @@ class struct <T extends Comparable<T>> {
 
 public class FamilyHeaps<T extends Comparable<T>> {
     private Map<T, struct<T>> components = new HashMap<>();
-    private Map<Integer, FibonacciHeap<T>> = new HashMap<>();
+    private Map<Integer, FibonacciHeap<T>> family = new HashMap<>();
     
     public void decreaseKey(T oldKey, T newKey) {
         if (!components.containsKey(oldKey)) {
