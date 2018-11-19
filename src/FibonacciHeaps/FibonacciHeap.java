@@ -7,6 +7,11 @@ public class FibonacciHeap<T extends Comparable <T>> {
     private Node<T> min = null;
     private int size = 0;
     
+    public FibonacciHeap() {
+        min = null;
+        size = 0;
+    }
+
     //There is no need to type a Constructor, we initialize the attributes in the declaration.
     
     public Node<T> getMin() {
@@ -24,8 +29,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
         min.leftSibling = node;
     }
 
-    public void push (T elem) {
-        Node<T> toInsert = new Node<>(elem);   
+    public void push (Node<T> toInsert) {
         //If the heap is empty, we have to connect the minimum to toInsert;
         if (min == null) {
             //We do not have any other sibling, so he is his self sibling.
@@ -186,7 +190,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
         //Delete the minimum
         pop();
         //Restore the minimum.
-        push(minimum.key);        
+        push(minimum);        
     }
     
 }
