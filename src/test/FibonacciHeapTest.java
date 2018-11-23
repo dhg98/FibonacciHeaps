@@ -50,8 +50,9 @@ public class FibonacciHeapTest {
         }
         try {
             heap1.pop();
+            fail("It should be an exception");
         } catch (NullPointerException e) {
-            fail(e.getMessage());
+            //It is OK, there should be an exception
         }
     }
     

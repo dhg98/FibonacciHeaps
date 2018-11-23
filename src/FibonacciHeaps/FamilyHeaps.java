@@ -17,6 +17,14 @@ public class FamilyHeaps<T extends Comparable<T>> {
     private Map<T, struct<T>> components = new HashMap<>();
     private Map<Integer, FibonacciHeap<T>> family = new HashMap<>();
     
+   public int size(int heap) {
+       if (heap > family.size()) 
+           throw new IllegalArgumentException("The heap does not exist");
+       else {
+           return family.get(heap).getSize();
+       }
+   }
+    
     public void decreaseKey(T oldKey, T newKey) {
         if (!components.containsKey(oldKey)) {
             throw new IllegalArgumentException("The element you are trying to modify does not exist");
