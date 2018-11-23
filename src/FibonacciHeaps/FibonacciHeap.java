@@ -6,12 +6,6 @@ import java.util.ArrayList;
 public class FibonacciHeap<T extends Comparable <T>> {
     private Node<T> min = null;
     private int size = 0;
-    
-    public FibonacciHeap() {
-        min = null;
-        size = 0;
-    }
-
     //There is no need to type a Constructor, we initialize the attributes in the declaration.
     
     public Node<T> getMin() {

@@ -6,6 +6,11 @@ import java.util.Map;
 class struct <T extends Comparable<T>> {
     protected Node<T> node;
     protected FibonacciHeap<T> heap;
+    
+    public struct(Node<T> node, FibonacciHeap<T> heap) {
+        this.node = node;
+        this.heap = heap;
+    }
 }
 
 public class FamilyHeaps<T extends Comparable<T>> {
@@ -22,6 +27,9 @@ public class FamilyHeaps<T extends Comparable<T>> {
             } else {
                 struct<T> old = components.get(oldKey);
                 old.heap.decreaseKey(old.node, newKey);
+                //We modify the map accordingly.
+                components.remove(oldKey);
+                components.put(newKey, old);
             }
         }
     }
@@ -32,15 +40,66 @@ public class FamilyHeaps<T extends Comparable<T>> {
         } else {
             struct<T> st = components.get(elem);
             st.heap.delete(st.node);
+            components.remove(elem);
         }
     }
 
+    public void push(T elem, int heap) {
+        if (components.containsKey(elem)) {
+            throw new IllegalArgumentException("The element you are trying to insert already exists");
+        } else {
+            if (heap > family.size()) throw new IllegalArgumentException("The heap in which you are trying"
+                    + " to insert does not exist");
+            else {
+                Node<T> nod = new Node<>(elem);
+                struct<T> newS = new struct<>(nod, family.get(heap));
+                components.put(elem, newS);
+                //We insert the node into the heap.
+                newS.heap.push(nod);
+            }
+        }
+    }
+    
     public void push(T elem) {
         if (components.containsKey(elem)) {
-            throw new IllegalArgumentException("There element you are trying to insert already exists");
+            throw new IllegalArgumentException("The element you are trying to insert already exists");
         } else {
-            
-            
+            Node<T> nod = new Node<> (elem);
+            FibonacciHeap<T> fib = new FibonacciHeap<>();
+            struct<T> newS = new struct<T>(nod, fib);
+            components.put(elem, newS);
+            //Insert the node into the heap
+            fib.push(nod);
+            //Insert the new heap in the family.
+            family.put(family.size() + 1, fib);
+        }
+    }
+    
+    public void union(int heap1, int heap2) {
+        if (heap1 > family.size() || heap2 > family.size()) {
+            throw new IllegalArgumentException("One of the heaps you are trying to link does not exist");
+        } else {
+            if (heap1 != heap2) {
+                family.get(heap1).union(family.get(heap2));
+                //Now the heap associated to both heap1 and heap2 is the same.
+                family.replace(heap2, family.get(heap1));
+            }
+        }
+    }
+    
+    public T top(int heap) {
+        if (heap > family.size()) {
+            throw new IllegalArgumentException("The heap you are trying to consult does not exist");
+        } else {
+            return family.get(heap).top();
+        }
+    }
+    
+    public Node<T> pop(int heap) {
+        if (heap > family.size()) {
+            throw new IllegalArgumentException("The heap you are trying to consult does not exist");
+        } else {
+            return family.get(heap).pop();
         }
     }
 }
