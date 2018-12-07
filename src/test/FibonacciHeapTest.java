@@ -70,10 +70,11 @@ public class FibonacciHeapTest {
         }
     }
 
-    public void decreaseKey() {
+    @Test
+    public void decreaseKeyTest() {
         FibonacciHeap<Integer> heap = new FibonacciHeap<>();
         Node<Integer> toDecrease = new Node<>(UPPER_BOUND);
-        
+        heap.push(toDecrease);
         for (int i = UPPER_BOUND - 1; i > UPPER_BOUND/2; --i) {
             Node<Integer> toInsert = new Node<>(i);
             heap.push(toInsert);
@@ -87,10 +88,8 @@ public class FibonacciHeapTest {
         heap.decreaseKey(toDecrease, UPPER_BOUND/2);
         
         //The node we have decreased his key, should appear at UPPER_BOUND/2 iteration.
-        for (int i = 1; i <= UPPER_BOUND; ++i) {
-            if (i == UPPER_BOUND/2) {
-                assertEquals((Integer) i, heap.top());
-            }
+        for (int i = 1; i < UPPER_BOUND; ++i) {
+            assertEquals((Integer) i, heap.top());
             heap.pop();
         }
     }

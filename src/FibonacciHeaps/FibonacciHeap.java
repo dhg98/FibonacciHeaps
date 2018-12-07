@@ -177,8 +177,8 @@ public class FibonacciHeap<T extends Comparable <T>> {
                     }
 
                     /* If the minimum is the one we are going to put as children, we have to 
-                     * change. Otherwise, we will be losing the structure. In addition, if the
-                     * next one we are going to visit is the minimum, we modify it as well.
+                     * change it. Otherwise, we will be losing the structure. In addition, if the
+                     * next one we are going to visit is the minimum, we modify the next one as well.
                      * 
                      * */
                     
