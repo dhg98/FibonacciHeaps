@@ -16,11 +16,24 @@ public class FibonacciHeap<T extends Comparable <T>> {
         return size;
     }
     
-    private void insertLeftMinimum(Node<T> node) {
-        min.leftSibling.rightSibling = node; 
-        node.leftSibling = min.leftSibling;
-        node.rightSibling = min;
-        min.leftSibling = node;
+    private void insertInHeapLeftMinimum(Node<T> toInsert) {
+        if (toInsert != null) {
+            if (min == null) {
+                //If we do not have elements in the heap, there is now only one tree
+                //and the siblings of the root is only himself.
+                min = toInsert;
+                toInsert.leftSibling = toInsert;
+                toInsert.rightSibling = toInsert;
+            } else {
+                min.leftSibling.rightSibling = toInsert;
+                toInsert.leftSibling = min.leftSibling;
+                min.leftSibling = toInsert;
+                toInsert.rightSibling = min;                
+                if (min.key.compareTo(toInsert.key) == 1) {
+                    min = toInsert;
+                }
+            }
+        }
     }
 
     public void push (Node<T> toInsert) {
@@ -32,7 +45,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
             min = toInsert;
         } else {
             //We insert the Node to the left of the minimum.
-            insertLeftMinimum(toInsert);
+            insertInHeapLeftMinimum(toInsert);
             //Update of the minimum
             if (min.key.compareTo(toInsert.key) > 0) {
                 min = toInsert;                
@@ -112,12 +125,87 @@ public class FibonacciHeap<T extends Comparable <T>> {
         return (Math.log10(num) / Math.log10(base));
     }
     
+    private void fibHeapLink(Node<T> y, Node<T> x) {
+        //Deletion of y from the root list of the heap.        
+        y.rightSibling.leftSibling = y.leftSibling;
+        y.leftSibling.rightSibling = y.rightSibling;
+        
+        if (x.child == null) {
+            //Only one children, the new one.
+            x.child = y;
+            //We have to update the siblings of y (this node does not have sibling).
+            y.leftSibling = y;
+            y.rightSibling = y;
+        } else {
+            //We link y with the children of x.
+            y.leftSibling = x.child.leftSibling;
+            x.child.leftSibling.rightSibling = y;
+            y.rightSibling = x.child;
+            x.child.leftSibling = y;            
+        }        
+        
+        //The y node has been made child of the x node, so we update the attribute.
+        y.father = x;
+        //Update of the degree (there is now one more son)
+        x.degree++;
+        //The Node y is has been made child of another node, so we change his mark.
+        y.marked = false;
+    }
+        
     private void consolidate() {
-        //The size of the Array is s
-        int sizeA = (int) (Math.ceil(log(size, 2)));
-        List<Node<T>> A = new ArrayList<>(sizeA);
-        
-        
+        //If the size of the heap is 0, log in every base is undefined, so we have to exclude that case.
+        if (min != null) {
+            //The size of the Array is sizeA
+            int sizeA = (int) (2 * (Math.floor(log(size, 2))));
+            List<Node<T>> A = new ArrayList<>();
+            //Every position in the array is initialized as null, which is appropriate.
+            for (int i = 0; i < sizeA; ++i) {
+                A.add(null);
+            }
+            
+            Node<T> act = min, next = min.rightSibling;
+            do {
+                int deg = act.degree;
+                while (A.get(deg) != null) {
+                    Node<T> y = A.get(deg);
+                    //If y.key is less than act.key
+                    if (act.key.compareTo(y.key) == 1) {
+                        //Exchange act with y.
+                        Node<T> aux = act;
+                        act = y;
+                        y = aux;
+                    }
+
+                    /* If the minimum is the one we are going to put as children, we have to 
+                     * change. Otherwise, we will be losing the structure. In addition, if the
+                     * next one we are going to visit is the minimum, we modify it as well.
+                     * 
+                     * */
+                    
+                    if (y == min) {
+                        if (next == min) {
+                            next = y.rightSibling;
+                        }
+                        min = y.rightSibling;
+                    }
+                    
+                    //Link both trees.
+                    fibHeapLink(y, act);
+                    
+                    A.set(deg, null);
+                    deg++;
+                }
+                A.set(deg, act);
+                act = next;
+                next = next.rightSibling;
+            } while (act != min);
+            
+            //We go over the Array and we insert every position in the Heap.
+            min = null;
+            for (int i = 0; i < A.size(); ++i) {
+                insertInHeapLeftMinimum(A.get(i));
+            }
+        }
     }
     
     public void decreaseKey(Node<T> node, T newKey) {
@@ -169,7 +257,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
         father.degree--;
         
         //Add child to the left of the minimum
-        insertLeftMinimum(child);
+        insertInHeapLeftMinimum(child);
         
         child.father = null;
         child.marked = false;

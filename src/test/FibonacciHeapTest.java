@@ -9,10 +9,8 @@ import org.junit.Test;
 import FibonacciHeaps.FibonacciHeap;
 import FibonacciHeaps.Node;
 
-//TODO LO QUE HAGA LLAMADAS A POP NO VA A FUNCIONAR TODAVIA AL NO ESTAR IMPLEMENTADA LA FUNCION CONSOLIDAR
-
 public class FibonacciHeapTest {
-    public static final int UPPER_BOUND = 5000;
+    public static final int UPPER_BOUND = 9;
     
     @Test
     public void testInsertAndDelete() {
@@ -67,7 +65,7 @@ public class FibonacciHeapTest {
         }
         heap.delete(toDelete);
         while (heap.getSize() > 0) {
-            assertNotEquals(toDelete.getKey(), heap.top());
+            assertNotEquals((Integer)UPPER_BOUND, heap.top());
             heap.pop();
         }
     }
