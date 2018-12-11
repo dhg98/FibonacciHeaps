@@ -18,7 +18,7 @@ public class FamilyHeaps<T extends Comparable<T>> {
     private Map<Integer, FibonacciHeap<T>> family = new HashMap<>();
     
    public int size(int heap) {
-       if (heap > family.size()) 
+       if (heap > family.size() || heap <= 0) 
            throw new IllegalArgumentException("The heap does not exist");
        else {
            return family.get(heap).getSize();
@@ -56,7 +56,7 @@ public class FamilyHeaps<T extends Comparable<T>> {
         if (components.containsKey(elem)) {
             throw new IllegalArgumentException("The element you are trying to insert already exists");
         } else {
-            if (heap > family.size()) throw new IllegalArgumentException("The heap in which you are trying"
+            if (heap > family.size() || heap <= 0) throw new IllegalArgumentException("The heap in which you are trying"
                     + " to insert does not exist");
             else {
                 Node<T> nod = new Node<>(elem);
@@ -84,7 +84,7 @@ public class FamilyHeaps<T extends Comparable<T>> {
     }
     
     public void union(int heap1, int heap2) {
-        if (heap1 > family.size() || heap2 > family.size()) {
+        if (heap1 > family.size() || heap2 > family.size() || heap1 <= 0 || heap2 <= 0) {
             throw new IllegalArgumentException("One of the heaps you are trying to link does not exist");
         } else {
             if (heap1 != heap2) {
@@ -96,7 +96,7 @@ public class FamilyHeaps<T extends Comparable<T>> {
     }
     
     public T top(int heap) {
-        if (heap > family.size()) {
+        if (heap > family.size() || heap <= 0) {
             throw new IllegalArgumentException("The heap you are trying to consult does not exist");
         } else {
             return family.get(heap).top();
@@ -104,8 +104,9 @@ public class FamilyHeaps<T extends Comparable<T>> {
     }
     
     public Node<T> pop(int heap) {
-        if (heap > family.size()) {
-            throw new IllegalArgumentException("The heap you are trying to consult does not exist");
+        if (heap > family.size() || heap <= 0) {
+            throw new IllegalArgumentException("The heap in which you are trying to delete the minimum "
+                    + "does not exist");
         } else {
             return family.get(heap).pop();
         }
