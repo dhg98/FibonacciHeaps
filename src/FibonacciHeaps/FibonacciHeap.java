@@ -166,7 +166,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
             Node<T> act = min, next = min.rightSibling;
             do {
                 int deg = act.degree;
-                while (A.get(deg) != null) {
+                while (deg < A.size() && A.get(deg) != null) {
                     Node<T> y = A.get(deg);
                     //If y.key is less than act.key
                     if (act.key.compareTo(y.key) == 1) {
