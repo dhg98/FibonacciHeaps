@@ -8,7 +8,7 @@ public class main {
     public final static int UPPER_BOUND = 200000;
     public final static int NUMBER_INSERTIONS = 7500;
     public final static int RATIO = 2; //4 Insertions, 1 deletion.
-    public final static int NUMBER_ITERATIONS = 1500;
+    public final static int NUMBER_ITERATIONS = 1500; 
 
     public static void main(String... args) {
         deleteMinAmortizedTime();
