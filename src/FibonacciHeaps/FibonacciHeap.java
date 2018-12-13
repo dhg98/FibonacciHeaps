@@ -22,8 +22,8 @@ public class FibonacciHeap<T extends Comparable <T>> {
                 //If we do not have elements in the heap, there is now only one tree
                 //and the siblings of the root is only himself.
                 min = toInsert;
-                toInsert.leftSibling = toInsert;
-                toInsert.rightSibling = toInsert;
+                min.leftSibling = min;
+                min.rightSibling = min;
             } else {
                 min.leftSibling.rightSibling = toInsert;
                 toInsert.leftSibling = min.leftSibling;
@@ -156,7 +156,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
         //If the size of the heap is 0, log in every base is undefined, so we have to exclude that case.
         if (min != null) {
             //The size of the Array is sizeA
-            int sizeA = (int) (2 * (Math.floor(log(size, 2))));
+            int sizeA = (int) (2 * (Math.ceil(log(size, 2))));
             List<Node<T>> A = new ArrayList<>();
             //Every position in the array is initialized as null, which is appropriate.
             for (int i = 0; i < sizeA; ++i) {
@@ -166,7 +166,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
             Node<T> act = min, next = min.rightSibling;
             do {
                 int deg = act.degree;
-                while (deg < A.size() && A.get(deg) != null) {
+                while (A.get(deg) != null) {
                     Node<T> y = A.get(deg);
                     //If y.key is less than act.key
                     if (act.key.compareTo(y.key) == 1) {

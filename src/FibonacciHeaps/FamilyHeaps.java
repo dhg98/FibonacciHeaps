@@ -2,6 +2,7 @@ package FibonacciHeaps;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 class struct <T extends Comparable<T>> {
     protected Node<T> node;
@@ -17,13 +18,17 @@ public class FamilyHeaps<T extends Comparable<T>> {
     private Map<T, struct<T>> components = new HashMap<>();
     private Map<Integer, FibonacciHeap<T>> family = new HashMap<>();
     
-   public int size(int heap) {
-       if (heap > family.size() || heap <= 0) 
-           throw new IllegalArgumentException("The heap does not exist");
-       else {
-           return family.get(heap).getSize();
-       }
-   }
+    public int numberHeaps() {
+        return family.size();
+    }
+    
+    public int size(int heap) {
+        if (heap > family.size() || heap <= 0) 
+            throw new IllegalArgumentException("The heap does not exist");
+        else {
+            return family.get(heap).getSize();
+        }
+    }
     
     public void decreaseKey(T oldKey, T newKey) {
         if (!components.containsKey(oldKey)) {
@@ -110,5 +115,14 @@ public class FamilyHeaps<T extends Comparable<T>> {
         } else {
             return family.get(heap).pop();
         }
+    }
+    
+    public T randomElement() {
+        //Method used to decrease some of the keys we have in the family. Only for testing purposes.
+        if (components.isEmpty()) throw new NullPointerException("There are no elements inside of the family");
+        for (T elem : components.keySet()) {
+            return elem;
+        }
+        return null;
     }
 }
