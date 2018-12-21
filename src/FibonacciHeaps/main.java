@@ -6,13 +6,14 @@ public class main {
     
     //The interval of insertions is [0, UPPER_BOUND]
     public final static int UPPER_BOUND = 20000000;
-    public final static int NUMBER_INSERTIONS = 1500;
-    public final static int RATIO_DELETE_MIN = 2; //4 Insertions, 1 deletion.
-    public final static int NUMBER_ITERATIONS = 1500; 
+    public final static int RATIO_DELETE_MIN = 2; //2 Insertions, 1 deletion.
     
-    public final static int RATIO_INSERT_OTHER = 3;
-    public final static int NUMBER_MAX_HEAPS = 2000;
-    public final static int MAX_INSERTIONS_FIRST = 100;
+    public final static int NUMBER_ITERATIONS = 2; 
+    public final static int NUMBER_INSERTIONS = 1250;
+    
+    public final static int RATIO_INSERT_OTHER = 2;
+    public final static int NUMBER_MAX_HEAPS = 2100;
+    public final static int MAX_INSERTIONS_FIRST = 80;
 
     public static void main(String... args) {
         //deleteMinAmortizedTime();
@@ -116,10 +117,11 @@ public class main {
                         //We do not decrease any key, but it is alright.
                     }
                 }
-                j = (j + 1) % (RATIO_DELETE_MIN + 3);
+                j = (j + 1) % (RATIO_INSERT_OTHER + 3);
             }
             
             long endTime = System.nanoTime();
+            totalTime += endTime - initTime;
         }
         totalTime = totalTime / NUMBER_ITERATIONS;
         

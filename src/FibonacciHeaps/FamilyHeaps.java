@@ -2,7 +2,6 @@ package FibonacciHeaps;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 class struct <T extends Comparable<T>> {
     protected Node<T> node;
@@ -93,9 +92,13 @@ public class FamilyHeaps<T extends Comparable<T>> {
             throw new IllegalArgumentException("One of the heaps you are trying to link does not exist");
         } else {
             if (heap1 != heap2) {
-                family.get(heap1).union(family.get(heap2));
+                FibonacciHeap<T> he1 = family.get(heap1);
+                FibonacciHeap<T> he2 = family.get(heap2);
+                he1.union(he2);
+                
                 //Now the heap associated to both heap1 and heap2 is the same.
-                family.replace(heap2, family.get(heap1));
+                family.put(heap1, he1);
+                family.put(heap2, he1);
             }
         }
     }

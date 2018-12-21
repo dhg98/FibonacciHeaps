@@ -18,6 +18,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
     
     private void insertInHeapLeftMinimum(Node<T> toInsert) {
         if (toInsert != null) {
+            toInsert.father = null;
             if (min == null) {
                 //If we do not have elements in the heap, there is now only one tree
                 //and the siblings of the root is only himself.
@@ -67,6 +68,7 @@ public class FibonacciHeap<T extends Comparable <T>> {
             if (min == null) {
                 min = otherHeap.min;
             } else {
+                //We insert the element in otherHeap inside the "this" object.
                 Node<T> minOther = otherHeap.min;
                 Node<T> leftNode = min.leftSibling;
                 min.leftSibling.rightSibling = minOther;
@@ -177,9 +179,9 @@ public class FibonacciHeap<T extends Comparable <T>> {
                     }
 
                     /* If the minimum is the one we are going to put as children, we have to 
-                     * change it. Otherwise, we will be losing the structure. In addition, if the
-                     * next one we are going to visit is the minimum, we modify the next one as well.
-                     * 
+                     * change it. Otherwise, we will be losing the access to the main list. 
+                     * In addition, if the next one we are going to visit is the minimum, we 
+                     * modify the next one as well.
                      * */
                     
                     if (y == min) {
