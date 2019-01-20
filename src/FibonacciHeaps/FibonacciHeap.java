@@ -277,4 +277,25 @@ public class FibonacciHeap<T extends Comparable <T>> {
         push(minimum);        
     }
     
+    public void incrementKey(Node<T> node, T newKey) {
+        if (node.key.compareTo(newKey) > 0) {
+            throw new IllegalArgumentException(newKey + " is lower than " + node.key);
+        } else {
+            Node<T> child = node.child;
+            Node<T> toChange = child.rightSibling;
+            while (child != toChange) {
+                toChange.father = null;
+                toChange = toChange.rightSibling;
+            }
+            min.leftSibling.rightSibling = node.child;
+            node.child.leftSibling.rightSibling = min;
+            Node<T> aux = node.child.leftSibling;
+            node.child.leftSibling = min.leftSibling;
+            min.leftSibling = aux;
+            node.degree = 0;
+            node.child = null;
+            node.key = newKey;
+        }
+    }
+    
 }

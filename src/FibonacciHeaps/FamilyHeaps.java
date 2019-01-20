@@ -128,4 +128,22 @@ public class FamilyHeaps<T extends Comparable<T>> {
         }
         return null;
     }
+    
+    //For mor information, see the appendix.
+    public void incrementKey(T oldKey, T newKey) {
+        if (!components.containsKey(oldKey)) {
+            throw new IllegalArgumentException("The element you are trying to modify does not exist");
+        } else {
+            //We do not admit duplicates
+            if (components.containsKey(newKey)) {
+                throw new IllegalArgumentException("There is already an element with such value");
+            } else {
+                struct<T> old = components.get(oldKey);
+                old.heap.incrementKey(old.node, newKey);
+                //We modify the map accordingly.
+                components.remove(oldKey);
+                components.put(newKey, old);
+            }
+        }
+    }
 }
